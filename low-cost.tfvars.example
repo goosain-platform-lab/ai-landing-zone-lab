@@ -1,0 +1,8 @@
+# Cheaper profile for short lab sessions. The defaults are production-grade;
+# these swap the biggest cost drivers for smaller tiers.
+rag_search_sku           = "basic"
+rag_app_service_plan_sku = "P0v3"
+stt_service_bus_sku      = "Standard" # no private endpoint; still Entra-only
+jumpbox_size             = "Standard_D2s_v5"
+bastion_sku              = "Basic"
+log_daily_quota_gb       = 0.5
