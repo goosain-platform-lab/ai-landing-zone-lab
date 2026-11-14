@@ -1,5 +1,7 @@
 # ai-landing-zone-lab
 
+[![ci](https://github.com/goosain-platform-lab/ai-landing-zone-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/goosain-platform-lab/ai-landing-zone-lab/actions/workflows/ci.yml)
+
 An **Azure AI application landing zone** in Terraform: a governed, private spoke that hosts these AI workloads:
 
 - **RAG chatbot**: Azure AI Search, Azure AI Services (chat and embedding models), Cosmos DB, and a front end with orchestrator and ingestion Function Apps. Infrastructure only, with placeholder apps. Module in this repo.
@@ -7,6 +9,15 @@ An **Azure AI application landing zone** in Terraform: a governed, private spoke
 - **Speech batch pipeline** (Service Bus, Function App, SQL, Azure OpenAI), from [terraform-azurerm-ai-stt-batch](https://github.com/goosain-platform-lab/terraform-azurerm-ai-stt-batch) at a pinned tag.
 
 The whole thing is **secretless**. Deployment uses OIDC, and every app reaches every service with a managed identity and RBAC. Key auth is disabled on Speech, Translator, AI Services, Search, Cosmos DB, Service Bus, Storage, SQL and Application Insights.
+
+## What this demonstrates
+
+- **Landing-zone layers:** governance (10 Azure Policy guardrails and a budget), connectivity (spoke VNet, NSGs, optional hub peering), private DNS (created here or reused from a hub) and management (central Log Analytics, Bastion, an Entra-joined jumpbox).
+- **Workload composition:** one module in this repo (RAG) and two external modules pinned by tag (speech real-time and batch).
+- **Secretless and private:** OIDC deployment, managed identities with least-privilege RBAC, 26 private endpoints, and public access off on every data service.
+- **CI quality gates:** `terraform validate` with both external modules pulled at their release tags, plus tflint and Checkov.
+
+**Status:** validated in CI; not deployed, to avoid running costs.
 
 ## Where this fits in an Azure landing zone
 
