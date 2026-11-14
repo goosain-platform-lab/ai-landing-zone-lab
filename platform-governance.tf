@@ -59,13 +59,11 @@ locals {
       id           = "040732e8-d947-40b8-95d6-854c95024bf8"
       display_name = "Azure Kubernetes Service Private Clusters should be enabled"
       parameters   = {}
-      audit_only   = true
     }
     aks-no-local-auth = {
       id           = "993c2fcd-2b29-49d2-9eb0-df2c3a730c32"
       display_name = "Azure Kubernetes Service Clusters should have local authentication methods disabled"
       parameters   = {}
-      audit_only   = true
     }
     # Enforced inside the cluster by the Azure Policy add-on (Gatekeeper).
     k8s-no-privilege-escalation = {
@@ -74,6 +72,9 @@ locals {
       parameters   = {}
     }
   }
+
+  # Definitions that only support Audit: they stay on Audit when Deny is chosen.
+  audit_only_policies = ["aks-private", "aks-no-local-auth"]
 }
 
 resource "azurerm_subscription_policy_assignment" "guardrails" {
@@ -83,9 +84,8 @@ resource "azurerm_subscription_policy_assignment" "guardrails" {
   display_name         = "AI LZ (${var.environment}): ${each.value.display_name}"
   subscription_id      = data.azurerm_subscription.current.id
   policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/${each.value.id}"
-  # Some definitions only support Audit; they stay on Audit when Deny is chosen.
   parameters = jsonencode(merge(each.value.parameters, {
-    effect = { value = try(each.value.audit_only, false) && var.policy_effect == "Deny" ? "Audit" : var.policy_effect }
+    effect = { value = contains(local.audit_only_policies, each.key) && var.policy_effect == "Deny" ? "Audit" : var.policy_effect }
   }))
 }
 
