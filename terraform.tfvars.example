@@ -1,0 +1,28 @@
+# Copy to terraform.tfvars for a local run, or enter these as Terraform
+# variables in the HCP Terraform workspace. Nothing here is a secret.
+
+location    = "southafricanorth"
+ai_location = "swedencentral"
+
+# Entra group allowed to sign in to the jumpbox through Bastion.
+jumpbox_admin_principal_id = "00000000-0000-0000-0000-000000000000"
+
+# Entra group whose members administer the STT SQL server.
+sql_entra_admin = {
+  login_username = "sql-admins-ai-lab"
+  object_id      = "00000000-0000-0000-0000-000000000000"
+}
+
+# Cost guardrail (billing currency). 0 disables.
+budget_amount         = 5000
+budget_contact_emails = ["you@example.com"]
+
+# Guardrails report by default. Switch to "Deny" once everything is compliant.
+policy_effect = "Audit"
+
+# Optional: peer to a hub and reuse its private DNS zones.
+# hub_virtual_network_id = "/subscriptions/<hub-sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<hub-vnet>"
+# use_hub_gateway        = true
+# existing_private_dns_zone_ids = {
+#   blob = "/subscriptions/<hub-sub>/resourceGroups/<rg>/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
+# }
