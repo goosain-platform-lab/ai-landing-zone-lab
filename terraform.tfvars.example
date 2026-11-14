@@ -13,6 +13,9 @@ sql_entra_admin = {
   object_id      = "00000000-0000-0000-0000-000000000000"
 }
 
+# Entra groups that get cluster admin on AKS (local accounts are disabled).
+aks_admin_group_object_ids = ["00000000-0000-0000-0000-000000000000"]
+
 # Cost guardrail (billing currency). 0 disables.
 budget_amount         = 5000
 budget_contact_emails = ["you@example.com"]

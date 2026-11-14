@@ -41,6 +41,15 @@ output "rag" {
   } : null
 }
 
+output "aks" {
+  description = "AKS workload outputs."
+  value = var.aks_enabled ? {
+    cluster           = module.aks[0].cluster
+    registry          = module.aks[0].registry
+    workload_identity = module.aks[0].workload_identity
+  } : null
+}
+
 output "stt" {
   description = "STT workload outputs (real-time and batch)."
   value = var.stt_enabled ? {
