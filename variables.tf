@@ -93,7 +93,7 @@ variable "jumpbox_enabled" {
 variable "jumpbox_size" {
   description = "Jumpbox VM size."
   type        = string
-  default     = "Standard_D4s_v3"
+  default     = "Standard_D4s_v5"
 }
 
 variable "jumpbox_admin_principal_id" {

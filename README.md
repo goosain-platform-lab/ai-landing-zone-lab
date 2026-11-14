@@ -64,7 +64,7 @@ Storage accounts drop the hyphens (`stragdocslabzan`). Set `unique_suffix` if a 
 | STT real-time | Speech / Translator | S0 / S1 |
 | STT real-time + batch | App Service plan (Windows), shared | B1 |
 | STT batch | Service Bus / SQL database | Premium 1 MU / S0 |
-| Shared | Bastion / jumpbox | Standard / Standard_D4s_v3 (Windows Server 2022) |
+| Shared | Bastion / jumpbox | Standard / Standard_D4s_v5 (Windows Server 2022) |
 
 Check that the default models are available in `ai_location` before applying, and change `chat_deployment` / `embedding_deployment` in `modules/rag` if they aren't.
 
@@ -140,7 +140,7 @@ The jumpbox shuts down at 19:00 every day (`jumpbox_auto_shutdown_time`). Its lo
 
 ## Cost
 
-These defaults bill continuously and are the main costs: **AI Search standard2**, **Service Bus Premium**, **Bastion Standard**, the **D4s_v3 jumpbox** (auto-shutdown helps), the **P1v3** plan and 26 **private endpoints**. Model tokens are pay-per-use. For short lab sessions:
+These defaults bill continuously and are the main costs: **AI Search standard2**, **Service Bus Premium**, **Bastion Standard**, the **D4s_v5 jumpbox** (auto-shutdown helps), the **P1v3** plan and 26 **private endpoints**. Model tokens are pay-per-use. For short lab sessions:
 
 - apply [`low-cost.tfvars.example`](low-cost.tfvars.example) (Search basic, P0v3, Service Bus Standard, smaller jumpbox, Bastion Basic);
 - set a `budget_amount`;
