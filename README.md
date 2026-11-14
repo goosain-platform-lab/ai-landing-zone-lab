@@ -157,7 +157,7 @@ The jumpbox shuts down at 19:00 every day (`jumpbox_auto_shutdown_time`). Its lo
 
 These defaults bill continuously and are the main costs: **AI Search standard2**, **Service Bus Premium**, **Bastion Standard**, the **D4s_v5 jumpbox** (auto-shutdown helps), the **P1v3** plan, 28 **private endpoints** and the **AKS node pools**. Model tokens are pay-per-use. For short lab sessions:
 
-- apply [`low-cost.tfvars.example`](low-cost.tfvars.example) (Search basic, P0v3, Service Bus Standard, smaller jumpbox, Bastion Basic);
+- apply [`low-cost.tfvars.example`](low-cost.tfvars.example) (Search basic, P0v3, Service Bus Standard, smaller jumpbox, Bastion Basic, AKS off);
 - set a `budget_amount`;
 - run `terraform destroy` when you're done.
 
