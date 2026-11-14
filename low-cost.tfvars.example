@@ -6,3 +6,4 @@ stt_service_bus_sku      = "Standard" # no private endpoint; still Entra-only
 jumpbox_size             = "Standard_D2s_v5"
 bastion_sku              = "Basic"
 log_daily_quota_gb       = 0.5
+aks_enabled              = false # the AKS node pools are the largest compute cost

@@ -25,12 +25,14 @@ locals {
   #   .128/27 RAG App Service integration
   #   .160/27 STT App Service integration
   #   .192/28 jumpbox
+  #   .224/27 AKS nodes (pods use an overlay range, so a /27 holds ~25 nodes)
   subnets = {
-    bastion = cidrsubnet(var.address_space, 2, 0)
-    pe      = cidrsubnet(var.address_space, 2, 1)
-    rag-app = cidrsubnet(var.address_space, 3, 4)
-    stt-app = cidrsubnet(var.address_space, 3, 5)
-    jumpbox = cidrsubnet(var.address_space, 4, 12)
+    bastion   = cidrsubnet(var.address_space, 2, 0)
+    pe        = cidrsubnet(var.address_space, 2, 1)
+    rag-app   = cidrsubnet(var.address_space, 3, 4)
+    stt-app   = cidrsubnet(var.address_space, 3, 5)
+    jumpbox   = cidrsubnet(var.address_space, 4, 12)
+    aks-nodes = cidrsubnet(var.address_space, 3, 7)
   }
 
   private_dns_zones = {
@@ -47,5 +49,6 @@ locals {
     sites      = "privatelink.azurewebsites.net"
     servicebus = "privatelink.servicebus.windows.net"
     sql        = "privatelink.database.windows.net"
+    acr        = "privatelink.azurecr.io"
   }
 }

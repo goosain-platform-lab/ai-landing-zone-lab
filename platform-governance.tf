@@ -55,7 +55,26 @@ locals {
       display_name = "Function apps should only be accessible over HTTPS"
       parameters   = {}
     }
+    aks-private = {
+      id           = "040732e8-d947-40b8-95d6-854c95024bf8"
+      display_name = "Azure Kubernetes Service Private Clusters should be enabled"
+      parameters   = {}
+    }
+    aks-no-local-auth = {
+      id           = "993c2fcd-2b29-49d2-9eb0-df2c3a730c32"
+      display_name = "Azure Kubernetes Service Clusters should have local authentication methods disabled"
+      parameters   = {}
+    }
+    # Enforced inside the cluster by the Azure Policy add-on (Gatekeeper).
+    k8s-no-privilege-escalation = {
+      id           = "1c6e92c9-99f0-4e55-9cf2-0c234dc48f99"
+      display_name = "Kubernetes clusters should not allow container privilege escalation"
+      parameters   = {}
+    }
   }
+
+  # Definitions that only support Audit: they stay on Audit when Deny is chosen.
+  audit_only_policies = ["aks-private", "aks-no-local-auth"]
 }
 
 resource "azurerm_subscription_policy_assignment" "guardrails" {
@@ -66,7 +85,7 @@ resource "azurerm_subscription_policy_assignment" "guardrails" {
   subscription_id      = data.azurerm_subscription.current.id
   policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/${each.value.id}"
   parameters = jsonencode(merge(each.value.parameters, {
-    effect = { value = var.policy_effect }
+    effect = { value = contains(local.audit_only_policies, each.key) && var.policy_effect == "Deny" ? "Audit" : var.policy_effect }
   }))
 }
 

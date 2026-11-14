@@ -66,16 +66,24 @@ resource "azurerm_subnet" "jumpbox" {
   address_prefixes     = [local.subnets.jumpbox]
 }
 
+resource "azurerm_subnet" "aks_nodes" {
+  name                 = "snet-aks-nodes-${local.suffix}"
+  resource_group_name  = azurerm_resource_group.network.name
+  virtual_network_name = azurerm_virtual_network.spoke.name
+  address_prefixes     = [local.subnets.aks-nodes]
+}
+
 #------------------------------------------------------------------------------
 # NSGs on every subnet except AzureBastionSubnet (Bastion manages its own
 # rules; an NSG there needs a specific rule set).
 #------------------------------------------------------------------------------
 locals {
   nsg_subnets = {
-    pe      = azurerm_subnet.pe.id
-    rag-app = azurerm_subnet.app["rag-app"].id
-    stt-app = azurerm_subnet.app["stt-app"].id
-    jumpbox = azurerm_subnet.jumpbox.id
+    pe        = azurerm_subnet.pe.id
+    rag-app   = azurerm_subnet.app["rag-app"].id
+    stt-app   = azurerm_subnet.app["stt-app"].id
+    jumpbox   = azurerm_subnet.jumpbox.id
+    aks-nodes = azurerm_subnet.aks_nodes.id
   }
 }
 

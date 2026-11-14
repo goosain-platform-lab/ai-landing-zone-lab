@@ -208,6 +208,24 @@ variable "stt_openai_deployments" {
   default = {}
 }
 
+variable "aks_enabled" {
+  description = "Deploy the private AKS cluster workload."
+  type        = bool
+  default     = true
+}
+
+variable "aks_admin_group_object_ids" {
+  description = "Entra groups granted cluster admin on AKS (local accounts are disabled)."
+  type        = list(string)
+  default     = []
+}
+
+variable "aks_gitops_repository_url" {
+  description = "Repository Flux reconciles from. Null turns GitOps off."
+  type        = string
+  default     = "https://github.com/goosain-platform-lab/terraform-azurerm-aks"
+}
+
 variable "sql_entra_admin" {
   description = "Entra group (recommended) that administers the STT batch SQL server. Null uses the deploying identity."
   type = object({

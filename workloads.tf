@@ -109,3 +109,38 @@ module "stt_batch" {
   openai_deployments = var.stt_openai_deployments
   sql_entra_admin    = var.sql_entra_admin
 }
+
+#------------------------------------------------------------------------------
+# Private AKS cluster (versioned module from its own repo)
+#------------------------------------------------------------------------------
+resource "azurerm_resource_group" "aks" {
+  count = var.aks_enabled ? 1 : 0
+
+  name     = "rg-aks-${local.suffix}"
+  location = var.location
+  tags     = merge(local.tags, { workload = "aks" })
+}
+
+module "aks" {
+  source = "git::https://github.com/goosain-platform-lab/terraform-azurerm-aks.git?ref=v0.1.0"
+  count  = var.aks_enabled ? 1 : 0
+
+  environment         = var.environment
+  location            = var.location
+  unique_suffix       = var.unique_suffix
+  resource_group_name = azurerm_resource_group.aks[0].name
+  tags                = merge(local.tags, { workload = "aks" })
+
+  node_subnet_id             = azurerm_subnet.aks_nodes.id
+  private_endpoint_subnet_id = azurerm_subnet.pe.id
+  private_dns_zone_ids       = local.private_dns_zone_ids
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
+
+  admin_group_object_ids = var.aks_admin_group_object_ids
+  gitops_repository_url  = var.aks_gitops_repository_url
+
+  depends_on = [
+    azurerm_private_dns_zone_virtual_network_link.spoke,
+    azurerm_subnet_network_security_group_association.this,
+  ]
+}
